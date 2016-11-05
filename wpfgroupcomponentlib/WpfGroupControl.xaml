@@ -8,12 +8,18 @@
              d:DesignHeight="300" d:DesignWidth="300">
     
     <UserControl.Resources>
+        <ControlTemplate x:Key="ButtonControlTemplate" TargetType="DataGridCell">
+            <Button Click="Button_Click" Background="{Binding RelativeSource={RelativeSource Self}, Path=Background}">Color</Button>
+        </ControlTemplate>
+        
         <Style TargetType="{x:Type DataGridCell}">
             
+     
             <Style.Triggers>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self},Path=Column.DisplayIndex}"
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self},Path=Column.DisplayIndex}"
                           Value="2" >
-                    <Setter Property="TextBlock.Foreground" Value="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}"/>
+                        <Setter Property="TextBlock.Foreground" Value="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}"/>
+                    <Setter Property="Template" Value="{StaticResource ButtonControlTemplate}"/>
                 </DataTrigger>
             </Style.Triggers>
             
@@ -37,7 +43,7 @@
         </Grid>
         <Grid Grid.Column="1" Name="LeDataGrid">
             <DataGrid    CanUserAddRows="false" RowStyle="{StaticResource GroupDatagridStyle}" Loaded="LeDataList_Loaded" Name="LeDataList" AutoGenerateColumns="True" HorizontalAlignment="Right" Width="200" VerticalAlignment="Stretch">
-            </DataGrid>  
+              </DataGrid>  
         </Grid>
     </Grid>
 </UserControl>

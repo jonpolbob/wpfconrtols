@@ -41,6 +41,56 @@ namespace wpfgroupcomponentlib
             return new Size(TextBlock.DesiredSize.Width, TextBlock.DesiredSize.Height);
         }
 
+
+        // sort le numero de ligne d'une cette ligne
+        private void OnCellDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DependencyObject leRow = (DependencyObject)sender;
+            if (leRow is DataGridCell) // verifie qu'on a clique une cell
+                // on boucl sur les parents jusqu'a avoir le datagridrow
+                while ((leRow != null) && !(leRow is DataGridRow))
+                {
+                leRow = VisualTreeHelper.GetParent(leRow);
+                }
+
+            MessageBox.Show(leRow.ToString());
+        }
+
+
+
+        // recupere le nuemro de ligne d'une cellule
+        private int GetCellRow(object Sender)
+        {   DependencyObject lobjet = (DependencyObject)Sender; // on ne sait pas tres bien ce que c'est
+            DataGridCell lacell;
+
+            if (lobjet is DataGridCell)
+                    lacell = (DataGridCell)Sender; // on sait que c'est une datagridcell
+            else // on na pas bien clique sur le truc : on cherche son parent
+                { DependencyObject leparent = VisualTreeHelper.GetParent(lobjet); //opn ne sait pas ce que c'est entre columnheader et datagridceell
+                if (leparent is DataGridCell)
+                    lacell = leparent as DataGridCell;
+                else
+                    return -1;
+                }
+
+            DependencyObject leRow = lacell;
+            // on boucl sur les parents jusqu'a avoir le datagridrow
+            while ((leRow != null) && !(leRow is DataGridRow))
+                {
+                leRow = VisualTreeHelper.GetParent(leRow);
+                }
+
+            if (leRow is DataGridRow)
+                {// datagridrow est un itemcaontainer  donc onpeut sortir l'index de la cellule
+                 DataGrid dataGrid = ItemsControl.ItemsControlFromItemContainer(leRow) as DataGrid; // on recupere le datagrid qui est la row
+                int index = dataGrid.ItemContainerGenerator.IndexFromContainer(leRow); // et on a la ligne ! 
+                return index;
+                }
+
+            return -1;
+        }
+
+        
         public WpfGroupControl()
         {
             InitializeComponent();
@@ -68,10 +118,7 @@ namespace wpfgroupcomponentlib
             }
             );
 
-         
-
-
-
+        
         }
 
         private void LeDataList_Loaded(object sender, RoutedEventArgs e)
@@ -84,5 +131,14 @@ namespace wpfgroupcomponentlib
             LeDataList.Columns[3].Visibility = Visibility.Collapsed;
             LeDataList.Columns[4].Visibility = Visibility.Collapsed;
         }
+
+        
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("click");
+
+        }
+
+        
     }
 }

@@ -45,12 +45,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GroupClass.cs" />
+    <Compile Include="MyColorPicker.xaml.cs">
+      <DependentUpon>MyColorPicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WpfGroupControl.xaml.cs">
       <DependentUpon>WpfGroupControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="MyColorPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WpfGroupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

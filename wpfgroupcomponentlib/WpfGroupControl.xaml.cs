@@ -21,8 +21,7 @@ namespace wpfgroupcomponentlib
     public partial class WpfGroupControl : UserControl
     {
         public System.Collections.ObjectModel.ObservableCollection<GroupClass> m_laliste = new System.Collections.ObjectModel.ObservableCollection<GroupClass>();
-
-
+      
         public Size MeasureString(string s)
         {
 
@@ -53,10 +52,19 @@ namespace wpfgroupcomponentlib
                 leRow = VisualTreeHelper.GetParent(leRow);
                 }
 
-            MessageBox.Show(leRow.ToString());
+
         }
 
-
+        private Brush ShowColorPicker()
+        {
+            Window laWindow = new Window();
+            MyColorPicker lepicker = new MyColorPicker();
+            laWindow.Content = lepicker;
+            laWindow.ShowDialog(); // showdialo permet de recuperer le contenu d'un mebre. sow ne le fait pas
+            Brush lacouleur = lepicker.selectedcolorname;
+            return lacouleur;
+        }
+        
 
         // recupere le nuemro de ligne d'une cellule
         private int GetCellRow(object Sender)
@@ -100,7 +108,7 @@ namespace wpfgroupcomponentlib
             m_laliste.Add(new GroupClass
             {
                 NumGroup = 0,
-                GroupColor = "red",
+                GroupColor = Brushes.Red,
                 GroupName = "default",
                 Value1 = "0",
                 Value2 = "0"
@@ -111,7 +119,7 @@ namespace wpfgroupcomponentlib
             m_laliste.Add(new GroupClass
             {
                 NumGroup = 1,
-                GroupColor = "Blue",
+                GroupColor = Brushes.AliceBlue,
                 GroupName = "group2",
                 Value1 = "01",
                 Value2 = "toto"
@@ -135,9 +143,21 @@ namespace wpfgroupcomponentlib
         
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("click");
-
-        }
+            Button lebouton = sender as Button;
+            Brush colorname = ShowColorPicker();
+     
+        DependencyObject leRow = (DependencyObject)sender;
+            while ((leRow != null) && !(leRow is DataGridRow))
+            {
+                leRow = VisualTreeHelper.GetParent(leRow);
+            }
+            if (leRow != null)
+                { GroupClass selectedClass = (GroupClass)((DataGridRow)leRow).Item;
+                selectedClass.GroupColor = colorname;
+                this.LeDataList.Items.Refresh();
+                
+                }
+            }
 
         
     }

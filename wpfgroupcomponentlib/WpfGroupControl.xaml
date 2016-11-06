@@ -8,29 +8,52 @@
              d:DesignHeight="300" d:DesignWidth="300">
     
     <UserControl.Resources>
+        <!-- template du bouton qui devient un recangle -->
         <ControlTemplate x:Key="ButtonControlTemplate" TargetType="DataGridCell">
-            <Button Click="Button_Click" Background="{Binding RelativeSource={RelativeSource Self}, Path=Background}">Color</Button>
+            <Button Click="Button_Click" >
+                <!--<Background="{Binding RelativeSource={RelativeSource Self}, Path=Background}"-->
+                   
+                <Button.Template>
+                <ControlTemplate>
+                    <Grid Margin="3 2">
+                            <Border CornerRadius="4" Name="r1"  BorderBrush="Black" >
+                                <Border.Background>
+                                    <!-- le seul moyen de changer l'opacite est de remonter au datagridrow, datagridcell ne marche pas-->
+                                    <SolidColorBrush 
+                                        Color="{Binding RelativeSource={RelativeSource  AncestorType=DataGridRow}, Path=Background.Color}"
+                                        Opacity="1.0" 
+                                        />
+                                </Border.Background>
+                            </Border>
+                            <Border Name="border" Width="{TemplateBinding ActualWidth}" Height="{TemplateBinding ActualHeight}"  CornerRadius="5" BorderThickness="1" />
+                    </Grid>
+                </ControlTemplate>
+                </Button.Template>
+                <Button.Content>"Color"</Button.Content>
+            </Button>
         </ControlTemplate>
         
+<!-- style de l cellule vec le bouton -->        
         <Style TargetType="{x:Type DataGridCell}">
             
      
             <Style.Triggers>
                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self},Path=Column.DisplayIndex}"
                           Value="2" >
-                        <Setter Property="TextBlock.Foreground" Value="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}"/>
-                    <Setter Property="Template" Value="{StaticResource ButtonControlTemplate}"/>
+                        <Setter Property="TextBlock.Foreground" 
+                                Value="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}"/>
+                        <Setter Property="Height" Value="30"/>
+                        <Setter Property="Template" Value="{StaticResource ButtonControlTemplate}"/>
                 </DataTrigger>
             </Style.Triggers>
             
         </Style>
-
+<!--  style de la row du datagid -->
         <Style x:Key="GroupDatagridStyle" TargetType="DataGridRow">
-            <Setter Property="Background">
-                <Setter.Value >
-                    <SolidColorBrush Color="{Binding GroupColor}" Opacity=".3" />
-                </Setter.Value >
-            </Setter>
+         <Setter Property="VerticalAlignment" Value="Top"/>
+         <Setter Property="Height" Value="{Binding }"/>
+            <Setter Property="Background" Value="{Binding GroupColor}"/>
+            
         </Style>
     </UserControl.Resources>
     
@@ -42,7 +65,14 @@
         <Grid Grid.Column="0" Name="LeDessin">
         </Grid>
         <Grid Grid.Column="1" Name="LeDataGrid">
-            <DataGrid    CanUserAddRows="false" RowStyle="{StaticResource GroupDatagridStyle}" Loaded="LeDataList_Loaded" Name="LeDataList" AutoGenerateColumns="True" HorizontalAlignment="Right" Width="200" VerticalAlignment="Stretch">
+            <DataGrid     CanUserAddRows="false" 
+                         RowStyle="{StaticResource GroupDatagridStyle}" 
+                         Loaded="LeDataList_Loaded" 
+                         Name="LeDataList" 
+                         AutoGenerateColumns="True" 
+                         HorizontalAlignment="Right" 
+                         Width="200" 
+                         VerticalAlignment="Top">
               </DataGrid>  
         </Grid>
     </Grid>

@@ -12,7 +12,7 @@ namespace wpfgroupcomponentlib
         
       public int NumGroup { get; set; }
       public string GroupName { get; set; }
-      public string GroupColor { get; set; }
+      public System.Windows.Media.Brush GroupColor { get; set; }
       public string Value1 { get; set; }
       public string Value2 { get; set; }
     }
